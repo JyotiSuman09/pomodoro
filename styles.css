@@ -1,5 +1,5 @@
 :root {
-    --background-color: rgb(71, 255, 230);
+    --background-color: rgb(94, 255, 73);
 }
 
 body {
@@ -22,17 +22,17 @@ body {
     margin: auto;
 }
 
-#title {
+#sessionStatus {
     font-weight: bold;
     font-size: 28px;
 }
 
-#time {
+#timer {
     font-size: 80px;
     font-weight: bold;
 }
 
-#start {
+.button {
     background-color: var(--background-color);
     border: 1px solid black;
     padding: 5px 45px;
@@ -40,7 +40,7 @@ body {
     cursor: pointer;
 }
 
-#start:hover {
+.button:hover {
     color: white;
     background-color: rgba(255, 0, 0, 0.05);
 }

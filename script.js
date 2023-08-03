@@ -1,30 +1,42 @@
 const start = document.getElementById("start");
-const time = document.getElementById("time");
-const title = document.getElementById("title");
+const timerDisplay = document.getElementById("timer");
+const title = document.getElementById("sessionStatus");
 
-let remainTime = 1500;
-let breakTime = 300;
+let workTIme = 25 * 60;
+let breakTime = 5 * 60;
+let remainWorkTime = workTIme;
+let remainBreakTime = breakTime;
 let timeId;
 let totalBreak = 4;
 
-start.addEventListener("click", () => {
-    start.style.display = "none";
-    startTimer();
-});
+function reset() {
+    remainWorkTime = workTIme;
+}
+
+function resetBreak() {
+    totalBreak--;
+    if (totalBreak === 1) (totalBreak = 4), (remainBreakTime = breakTime * 3);
+    else remainBreakTime = breakTime;
+}
+
+function updateTimerDisplay(currentDuration) {
+    const minutes = Math.floor(currentDuration / 60)
+        .toString()
+        .padStart(2, "0");
+    const seconds = (currentDuration % 60).toString().padStart(2, "0");
+    timerDisplay.textContent = `${minutes}:${seconds}`;
+}
 
 function startTimer() {
-    title.innerHTML = "POMODORO";
+    title.innerHTML = "WORK SESSION";
     timeId = setInterval(() => {
-        const min = Math.floor(remainTime / 60);
-        const sec = remainTime % 60;
+        updateTimerDisplay(remainWorkTime);
 
-        time.innerHTML = `${min}:${sec}`;
-
-        if (remainTime === 0) {
+        if (remainWorkTime === 0) {
             reset();
             clearInterval(timeId);
             startBreak();
-        } else remainTime--;
+        } else remainWorkTime--;
     }, 1000);
 }
 
@@ -32,31 +44,37 @@ function startBreak() {
     title.innerHTML = "BREAK";
     playAudio();
     timeId = setInterval(() => {
-        const min = Math.floor(breakTime / 60);
-        const sec = breakTime % 60;
+        updateTimerDisplay(remainBreakTime);
 
-        time.innerHTML = `${min}:${sec}`;
-
-        if (breakTime === 0) {
+        if (remainBreakTime === 0) {
             resetBreak();
             clearInterval(timeId);
             startTimer();
-        } else breakTime--;
+        } else remainBreakTime--;
     }, 1000);
 }
 
-function resetBreak() {
-    totalBreak--;
-    if (totalBreak === 0) (totalBreak = 4), (breakTime = 900);
-    else breakTime = 300;
-}
-
-function reset() {
-    remainTime = 1500;
-}
-
 function playAudio() {
-    const audioSrc = "/assets/jaldi waha se hato meme template.m4a";
+    const audioSrc = "/assets/warn.m4a";
     const audioElement = new Audio(audioSrc);
     audioElement.play();
 }
+
+function getRandomColor() {
+    const red = Math.floor(Math.random() * 256);
+    const green = Math.floor(Math.random() * 256);
+    const blue = Math.floor(Math.random() * 256);
+    return `rgb(${red}, ${green}, ${blue})`;
+}
+
+function changeBackgroundColor() {
+    const randomColor = getRandomColor();
+    document.body.style.backgroundColor = randomColor;
+    start.style.backgroundColor = randomColor;
+}
+
+changeBackgroundColor();
+start.addEventListener("click", () => {
+    start.style.display = "none";
+    startTimer();
+});
